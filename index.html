@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Tải & Kiểm Tra File - Dự Án KS Ứng Dụng</title>
+    <meta name="description" content="Công cụ kiểm tra file và hướng dẫn tải dữ liệu từ các ứng dụng cho đáp viên dự án Khảo Sát Ứng Dụng">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <!-- Three.js for 3D Earth -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+</head>
+<body>
+    <!-- Floating particles background -->
+    <div class="particles" id="particles"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="grain"></div>
+    <div class="moon-hero">
+        <div id="moon-canvas" class="moon-3d"></div>
+        <div class="survey-search-bar">
+            <i class="fas fa-search"></i>
+            <div class="search-text">Tìm kiếm: <span>Khảo sát ứng dụng di động...</span></div>
+        </div>
+    </div>
+
+    <!-- 3D Earth Container -->
+    <div id="earth-container" class="earth-container">
+        <div id="earth-canvas"></div>
+        <div class="earth-label">Dữ liệu toàn cầu</div>
+    </div>
+
+    <!-- Orion Constellation (Feng Shui) -->
+    <div class="constellation-orion">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+            <!-- Connecting lines -->
+            <path d="M60 50 L140 70 L130 150 L150 250 M50 230 L80 150 L60 50 M80 150 L105 155 L130 150" fill="none" class="orion-path" />
+            
+            <!-- Stars -->
+            <circle cx="60" cy="50" r="3.5" class="orion-star betelgeuse" />
+            <circle cx="140" cy="70" r="2.5" class="orion-star bellatrix" />
+            <circle cx="80" cy="150" r="2.5" class="orion-star mintaka" />
+            <circle cx="105" cy="155" r="2.5" class="orion-star alnilam" />
+            <circle cx="130" cy="150" r="2.5" class="orion-star alnitak" />
+            <circle cx="50" cy="230" r="2.5" class="orion-star saiph" />
+            <circle cx="150" cy="250" r="4" class="orion-star rigel" />
+            
+            <!-- Sword -->
+            <circle cx="107" cy="175" r="1.5" class="orion-star-small" />
+            <circle cx="109" cy="190" r="1.8" class="orion-star-small" />
+            <circle cx="111" cy="205" r="1.5" class="orion-star-small" />
+        </svg>
+        <div class="orion-label">Chòm sao Orion (May mắn)</div>
+    </div>
+
+    <!-- Comets -->
+    <div class="comet-container">
+        <div class="comet comet-1"></div>
+        <div class="comet comet-2"></div>
+        <div class="comet comet-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-file-circle-check"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>KHẢO SÁT ỨNG DỤNG</h1>
+                    <div id="digital-clock" class="digital-clock">00:00:00 - 00/00/202X</div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#checker" class="nav-link active" data-section="checker">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Kiểm tra file</span>
+                </a>
+                <a href="#guide" class="nav-link" data-section="guide">
+                    <i class="fas fa-book-open"></i>
+                    <span>Hướng dẫn tải</span>
+                </a>
+                <a href="#steps" class="nav-link" data-section="steps">
+                    <i class="fas fa-list-ol"></i>
+                    <span>Các bước</span>
+                </a>
+                <a href="#referral" class="nav-link" data-section="referral">
+                    <i class="fas fa-users-viewfinder"></i>
+                    <span>Giới thiệu</span>
+                </a>
+                <a href="#security" class="nav-link" data-section="security">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Bảo mật</span>
+                </a>
+                <a href="#faq" class="nav-link" data-section="faq">
+                    <i class="fas fa-circle-question"></i>
+                    <span>FAQ</span>
+                </a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#checker" class="mobile-nav-link" data-section="checker">
+            <i class="fas fa-clipboard-check"></i> Kiểm tra file
+        </a>
+        <a href="#guide" class="mobile-nav-link" data-section="guide">
+            <i class="fas fa-book-open"></i> Hướng dẫn tải
+        </a>
+        <a href="#steps" class="mobile-nav-link" data-section="steps">
+            <i class="fas fa-list-ol"></i> Các bước tham gia
+        </a>
+        <a href="#referral" class="mobile-nav-link" data-section="referral">
+            <i class="fas fa-users-viewfinder"></i> Chương trình giới thiệu
+        </a>
+        <a href="#security" class="mobile-nav-link" data-section="security">
+            <i class="fas fa-shield-halved"></i> Bảo mật
+        </a>
+        <a href="#faq" class="mobile-nav-link" data-section="faq">
+            <i class="fas fa-circle-question"></i> FAQ
+        </a>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-gift"></i>
+                    Nhận thưởng tới 500K
+                </div>
+                <h2 class="hero-title">
+                    Kiểm tra & Tải file<br>
+                    <span class="gradient-text">Dữ liệu ứng dụng</span>
+                </h2>
+                <p class="hero-desc">
+                    Hướng dẫn chi tiết cách tải file từ các ứng dụng và kiểm tra đảm bảo đủ file trước khi gửi.
+                    <strong>50K/app, tối đa 10 app = 500K!</strong>
+                </p>
+                <div class="hero-actions">
+                    <a href="#checker" class="btn btn-primary">
+                        <i class="fas fa-clipboard-check"></i>
+                        Kiểm tra file ngay
+                    </a>
+                    <a href="#guide" class="btn btn-secondary">
+                        <i class="fas fa-play-circle"></i>
+                        Xem hướng dẫn
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">50K</div>
+                        <div class="stat-label">/ mỗi app</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">app tối đa</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <div class="stat-number">3 phút</div>
+                        <div class="stat-label">khảo sát</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps Section -->
+        <section class="section" id="steps">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Các bước tham gia</h2>
+                    <p class="section-desc">Chỉ 4 bước đơn giản để nhận thưởng</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card" style="--delay: 0">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i class="fas fa-pen-to-square"></i></div>
+                        <h3>Làm khảo sát</h3>
+                        <p>Hoàn thành khảo sát tham gia chỉ <strong>3 phút</strong></p>
+                        <a href="https://sg.ifm.io/s3/53730refctv150k?ref=968121894" target="_blank" class="step-link">
+                            Làm khảo sát <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                    <div class="step-card" style="--delay: 1">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i class="fas fa-download"></i></div>
+                        <h3>Tải file</h3>
+                        <p>Xem hướng dẫn & tải file từ các app bạn đã chọn</p>
+                        <a href="#guide" class="step-link">
+                            Xem hướng dẫn <i class="fas fa-arrow-down"></i>
+                        </a>
+                    </div>
+                    <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                    <div class="step-card" style="--delay: 2">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i class="fas fa-paper-plane"></i></div>
+                        <h3>Gửi file</h3>
+                        <p>Gửi file qua <strong>Zalo</strong> cho trưởng nhóm</p>
+                        <a href="http://zalo.me/84764551902" target="_blank" class="step-link">
+                            Liên hệ Zalo <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                    <div class="step-card highlight" style="--delay: 3">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <h3>Nhận thưởng</h3>
+                        <p>Rung đùi chờ nhận <strong>50K/app</strong> 💰</p>
+                        <span class="step-badge">1-2 tuần 1 lần</span>
+                    </div>
+                </div>
+                <div class="send-note">
+                    <div class="send-note-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="send-note-content">
+                        <strong>💡 Lưu ý khi gửi file:</strong> Nếu file quá lớn, hãy tải lên <strong>Google Drive</strong> và gửi link cho admin (nhớ cấp quyền tải), hoặc liên hệ admin để được hướng dẫn gửi qua <strong>Google Drive / WeTransfer</strong>.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Referral Section -->
+        <section class="section referral-section" id="referral">
+            <div class="container">
+                <div class="referral-box">
+                    <div class="referral-content">
+                        <div class="referral-badge">⚡ CHƯƠNG TRÌNH HOT</div>
+                        <h2 class="referral-title">Mời bạn tham gia - Nhận ngay 100K</h2>
+                        <p class="referral-desc">
+                            Giới thiệu người thân, bạn bè tham gia khảo sát và nhận thưởng không giới hạn! 
+                            Mỗi đáp viên hoàn thành khảo sát thành công, bạn nhận ngay <strong>100.000đ</strong>.
+                        </p>
+                        
+                        <div class="referral-rules">
+                            <div class="referral-rule">
+                                <i class="fas fa-link"></i>
+                                <span>Gửi link giới thiệu riêng (Liên hệ Zalo admin để lấy)</span>
+                            </div>
+                            <div class="referral-rule">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <span>Hướng dẫn họ tải file & gửi thành công cho Admin</span>
+                            </div>
+                            <div class="referral-rule highlight-rule">
+                                <i class="fas fa-bolt"></i>
+                                <span>1 file YouTube chất lượng tốt = 100K bonus!</span>
+                            </div>
+                            <div class="referral-rule">
+                                <i class="fas fa-gift"></i>
+                                <span>Người được giới thiệu vẫn hưởng đủ 50K/app</span>
+                            </div>
+                        </div>
+
+                        <div class="referral-actions">
+                            <a href="http://zalo.me/84764551902" target="_blank" class="btn btn-referral">
+                                <i class="fab fa-whatsapp"></i> Nhắn Zalo lấy link ngay
+                            </a>
+                        </div>
+                    </div>
+                    <div class="referral-visual">
+                        <div class="referral-card-ui">
+                            <div class="card-ui-header">Thưởng giới thiệu</div>
+                            <div class="card-ui-amount">100.000đ</div>
+                            <div class="card-ui-user">Thành công <i class="fas fa-arrow-right"></i> Nhận thưởng</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- File Checker Section -->
+        <section class="section checker-section" id="checker">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        Kiểm tra file trước khi gửi
+                    </h2>
+                    <p class="section-desc">Chọn các app bạn sử dụng, sau đó kiểm tra xem đã có đủ file chưa</p>
+                </div>
+
+                <!-- Platform Cards -->
+                <div class="checker-grid" id="checkerGrid">
+                    <!-- YouTube -->
+                    <div class="platform-card" data-platform="youtube" id="card-youtube">
+                        <div class="platform-header">
+                            <div class="platform-logo youtube-bg">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div class="platform-info">
+                                <h3>YouTube</h3>
+                                <span class="platform-condition">Sử dụng trên 30 phút/tuần</span>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" class="platform-toggle" data-platform="youtube">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="platform-body" id="body-youtube">
+                            <div class="file-path-info">
+                                <i class="fas fa-folder-open"></i>
+                                <span>Takeout / YouTube và YouTube Music / lịch sử /</span>
+                            </div>
+                            <div class="file-checklist">
+                                <label class="file-item">
+                                    <input type="checkbox" class="file-check" data-file="lich-su-tim-kiem">
+                                    <span class="file-check-icon"></span>
+                                    <span class="file-name">lịch sử tìm kiếm.html</span>
+                                    <span class="file-badge required">Bắt buộc</span>
+                                </label>
+                                <label class="file-item">
+                                    <input type="checkbox" class="file-check" data-file="nhat-ky-xem">
+                                    <span class="file-check-icon"></span>
+                                    <span class="file-name">nhật ký xem.html</span>
+                                    <span class="file-badge required">Bắt buộc</span>
+                                </label>
+                            </div>
+                            <div class="platform-status" id="status-youtube">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Cần đủ 2 file</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Chrome -->
+                    <div class="platform-card" data-platform="google" id="card-google">
+                        <div class="platform-header">
+                            <div class="platform-logo google-bg">
+                                <i class="fab fa-chrome"></i>
+                            </div>
+                            <div class="platform-info">
+                                <h3>Google Chrome</h3>
+                                <span class="platform-condition">Có sử dụng là được</span>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" class="platform-toggle" data-platform="google">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="platform-body" id="body-google">
+                            <div class="file-path-info">
+                                <i class="fas fa-folder-open"></i>
+                                <span>Takeout / Chrome /</span>
+                            </div>
+                            <div class="file-checklist">
+                                <label class="file-item">
+                                    <input type="checkbox" class="file-check" data-file="nhat-ky-json">
+                                    <span class="file-check-icon"></span>
+                                    <span class="file-name">Nhật ký.json</span>
+                                    <span class="file-badge required">Bắt buộc</span>
+                                </label>
+                            </div>
+                            <div class="platform-status" id="status-google">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Cần đủ 1 file</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TikTok -->
+                    <div class="platform-card" data-platform="tiktok" id="card-tiktok">
+                        <div class="platform-header">
+                            <div class="platform-logo tiktok-bg">
+                                <i class="fab fa-tiktok"></i>
+                            </div>
+                            <div class="platform-info">
+                                <h3>TikTok</h3>
+                                <span class="platform-condition">Sử dụng trên 30 phút/tuần</span>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" class="platform-toggle" data-platform="tiktok">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="platform-body" id="body-tiktok">
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>TikTok / Hoạt động của bạn /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="lich-su-xem-tiktok">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">Lịch sử xem.txt</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="luot-tim-kiem-tiktok">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">Lượt tìm kiếm.txt</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>TikTok Shopping /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="lich-su-dat-hang">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">Lịch sử đặt hàng.txt</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="lich-su-duyet-xem-sp">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">Lịch sử duyệt xem sản phẩm.txt</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="platform-status" id="status-tiktok">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Cần đủ 4 file</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Facebook -->
+                    <div class="platform-card" data-platform="facebook" id="card-facebook">
+                        <div class="platform-header">
+                            <div class="platform-logo facebook-bg">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div class="platform-info">
+                                <h3>Facebook</h3>
+                                <span class="platform-condition">Có sử dụng là được</span>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" class="platform-toggle" data-platform="facebook">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="platform-body" id="body-facebook">
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>ads_information /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="advertisers-using">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">advertisers_using.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="advertiser-interacted">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">advertiser_you've_interacted.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>your_facebook_activity / groups /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="group-membership">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">your_group_membership_activity.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="platform-status" id="status-facebook">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Cần đủ 3 file</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div class="platform-card" data-platform="instagram" id="card-instagram">
+                        <div class="platform-header">
+                            <div class="platform-logo instagram-bg">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="platform-info">
+                                <h3>Instagram</h3>
+                                <span class="platform-condition">Có sử dụng là được</span>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" class="platform-toggle" data-platform="instagram">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="platform-body" id="body-instagram">
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>ads_information / ads_and_topics /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="ads-clicked">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">ads_clicked.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="ads-viewed">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">ads_viewed.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="posts-viewed">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">posts_viewed.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="video-watched">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">video_watched.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>ads_information / instagram_ads_and_businesses /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="advertisers-using-ig">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">advertisers_using_your_activity_or_information.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="other-categories">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">other_categories_used_to_reach_you.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="file-group">
+                                <div class="file-group-header">
+                                    <i class="fas fa-folder"></i>
+                                    <span>logged_information / recent_searches /</span>
+                                </div>
+                                <div class="file-checklist">
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="profiles-searches">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">profiles_searches.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                    <label class="file-item">
+                                        <input type="checkbox" class="file-check" data-file="word-phrase-searches">
+                                        <span class="file-check-icon"></span>
+                                        <span class="file-name">word_or_phrase_searches.json</span>
+                                        <span class="file-badge required">Bắt buộc</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="platform-status" id="status-instagram">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Cần đủ 8 file</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overall Status -->
+                <div class="overall-status" id="overallStatus">
+                    <div class="overall-status-inner">
+                        <div class="overall-icon">
+                            <i class="fas fa-circle-question"></i>
+                        </div>
+                        <div class="overall-text">
+                            <h3>Chọn ít nhất 1 app để bắt đầu kiểm tra</h3>
+                            <p>Bật toggle của app bạn sử dụng, sau đó tick vào các file bạn đã có</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Guide Section -->
+        <section class="section guide-section" id="guide">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-book-open"></i>
+                        Hướng dẫn tải file từ các app
+                    </h2>
+                    <p class="section-desc">Nhấn vào từng app để xem hướng dẫn chi tiết</p>
+                </div>
+
+                <!-- Guide filter tabs -->
+                <div class="guide-tabs">
+                    <button class="guide-tab active" data-filter="all">
+                        <i class="fas fa-th-large"></i> Tất cả
+                    </button>
+                    <button class="guide-tab" data-filter="main">
+                        <i class="fas fa-star"></i> App chính
+                    </button>
+                    <button class="guide-tab" data-filter="extra">
+                        <i class="fas fa-plus-circle"></i> App khác
+                    </button>
+                    <button class="guide-tab" data-filter="utility">
+                        <i class="fas fa-wrench"></i> Tiện ích
+                    </button>
+                </div>
+
+                <div class="guide-grid" id="guideGrid">
+                    <!-- YouTube & Google -->
+                    <div class="guide-card main" data-category="main" id="guide-youtube">
+                        <div class="guide-card-header">
+                            <div class="guide-logo youtube-bg">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div>
+                                <h3>YouTube + Google Chrome + Gemini</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag important">Bắt buộc có YouTube</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <div class="guide-steps-visual">
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">1</div>
+                                    <div class="guide-step-content">
+                                        <h4>Truy cập Google Takeout</h4>
+                                        <p>Vào <a href="https://takeout.google.com" target="_blank">takeout.google.com</a> và đăng nhập tài khoản Google</p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">2</div>
+                                    <div class="guide-step-content">
+                                        <h4>Chọn dữ liệu</h4>
+                                        <p>Chọn <strong>YouTube</strong>, <strong>Chrome</strong> (và <strong>Gemini Apps</strong> nếu có)</p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">3</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tạo bản xuất</h4>
+                                        <p>Nhấn "Bước tiếp theo" → chọn xuất 1 lần → Tạo bản xuất</p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">4</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải về</h4>
+                                        <p>Chờ email thông báo → tải file zip về</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-files-preview">
+                                <h4><i class="fas fa-file-alt"></i> File cần có:</h4>
+                                <div class="guide-file-tree">
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> Takeout
+                                        <div class="tree-children">
+                                            <div class="tree-folder">
+                                                <i class="fas fa-folder"></i> YouTube và YouTube Music
+                                                <div class="tree-children">
+                                                    <div class="tree-folder">
+                                                        <i class="fas fa-folder"></i> lịch sử
+                                                        <div class="tree-children">
+                                                            <div class="tree-file"><i class="fas fa-file-code"></i> lịch sử tìm kiếm.html</div>
+                                                            <div class="tree-file"><i class="fas fa-file-code"></i> nhật ký xem.html</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tree-folder">
+                                                <i class="fas fa-folder"></i> Chrome
+                                                <div class="tree-children">
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> Nhật ký.json</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1N0IT8QOErISySLvSj_bp6CAqt4hSomTp/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- TikTok -->
+                    <div class="guide-card main" data-category="main" id="guide-tiktok">
+                        <div class="guide-card-header">
+                            <div class="guide-logo tiktok-bg">
+                                <i class="fab fa-tiktok"></i>
+                            </div>
+                            <div>
+                                <h3>TikTok & TikTok Shop</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag">Trên 30 phút/tuần</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <div class="guide-steps-visual">
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">1</div>
+                                    <div class="guide-step-content">
+                                        <h4>Vào Cài đặt TikTok</h4>
+                                        <p>Mở TikTok → <strong>Hồ sơ</strong> → <strong>Cài đặt & quyền riêng tư</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">2</div>
+                                    <div class="guide-step-content">
+                                        <h4>Yêu cầu dữ liệu</h4>
+                                        <p>Chọn <strong>Quyền riêng tư</strong> → <strong>Tải dữ liệu của bạn</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">3</div>
+                                    <div class="guide-step-content">
+                                        <h4>Chọn định dạng TXT</h4>
+                                        <p>Chọn format <strong>TXT</strong> → Yêu cầu dữ liệu</p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">4</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải về</h4>
+                                        <p>Chờ thông báo (1-4 ngày) → Tải file về</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-files-preview">
+                                <h4><i class="fas fa-file-alt"></i> File cần có:</h4>
+                                <div class="guide-file-tree">
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> TikTok
+                                        <div class="tree-children">
+                                            <div class="tree-folder">
+                                                <i class="fas fa-folder"></i> Hoạt động của bạn
+                                                <div class="tree-children">
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> Lịch sử xem.txt</div>
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> Lượt tìm kiếm.txt</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> TikTok Shopping
+                                        <div class="tree-children">
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> Lịch sử đặt hàng.txt</div>
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> Lịch sử duyệt xem sản phẩm.txt</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1MTK_E109jvQy9WJKGdZvmaZnhCtTqdo4/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Facebook -->
+                    <div class="guide-card main" data-category="main" id="guide-facebook">
+                        <div class="guide-card-header">
+                            <div class="guide-logo facebook-bg">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div>
+                                <h3>Facebook</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag easy">Có sử dụng là được</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <div class="guide-steps-visual">
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">1</div>
+                                    <div class="guide-step-content">
+                                        <h4>Vào Cài đặt Facebook</h4>
+                                        <p><strong>Cài đặt & Quyền riêng tư</strong> → <strong>Cài đặt</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">2</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải thông tin</h4>
+                                        <p>Chọn <strong>Tải thông tin của bạn</strong> → <strong>Tải xuống thông tin</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">3</div>
+                                    <div class="guide-step-content">
+                                        <h4>Chọn dữ liệu</h4>
+                                        <p>Chọn <strong>JSON</strong>, chọn mục <strong>Quảng cáo</strong> và <strong>Nhóm</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">4</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải về</h4>
+                                        <p>Tạo file → chờ thông báo → tải về</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-files-preview">
+                                <h4><i class="fas fa-file-alt"></i> File cần có:</h4>
+                                <div class="guide-file-tree">
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> ads_information
+                                        <div class="tree-children">
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> advertisers_using.json</div>
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> advertiser_you've_interacted.json</div>
+                                        </div>
+                                    </div>
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> your_facebook_activity / groups
+                                        <div class="tree-children">
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> your_group_membership_activity.json</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1OKQfT3Gk9PPFFXTZ53SdcOqlQcqe122K/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div class="guide-card main" data-category="main" id="guide-instagram">
+                        <div class="guide-card-header">
+                            <div class="guide-logo instagram-bg">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div>
+                                <h3>Instagram</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag easy">Có sử dụng là được</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <div class="guide-steps-visual">
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">1</div>
+                                    <div class="guide-step-content">
+                                        <h4>Vào Trung tâm tài khoản</h4>
+                                        <p>Mở Instagram → <strong>Cài đặt</strong> → <strong>Trung tâm tài khoản</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">2</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải thông tin</h4>
+                                        <p><strong>Thông tin của bạn & quyền</strong> → <strong>Tải thông tin xuống</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">3</div>
+                                    <div class="guide-step-content">
+                                        <h4>Chọn dữ liệu</h4>
+                                        <p>Chọn tài khoản Instagram → chọn mục <strong>Quảng cáo</strong> và <strong>Tìm kiếm</strong> → format <strong>JSON</strong></p>
+                                    </div>
+                                </div>
+                                <div class="guide-step-item">
+                                    <div class="guide-step-num">4</div>
+                                    <div class="guide-step-content">
+                                        <h4>Tải về</h4>
+                                        <p>Tạo file → nhận thông báo → tải file zip</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-files-preview">
+                                <h4><i class="fas fa-file-alt"></i> File cần có:</h4>
+                                <div class="guide-file-tree">
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> ads_information
+                                        <div class="tree-children">
+                                            <div class="tree-folder">
+                                                <i class="fas fa-folder"></i> ads_and_topics
+                                                <div class="tree-children">
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> ads_clicked.json</div>
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> ads_viewed.json</div>
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> posts_viewed.json</div>
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> video_watched.json</div>
+                                                </div>
+                                            </div>
+                                            <div class="tree-folder">
+                                                <i class="fas fa-folder"></i> instagram_ads_and_businesses
+                                                <div class="tree-children">
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> advertisers_using_your_activity_or_information.json</div>
+                                                    <div class="tree-file"><i class="fas fa-file-lines"></i> other_categories_used_to_reach_you.json</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tree-folder">
+                                        <i class="fas fa-folder"></i> logged_information / recent_searches
+                                        <div class="tree-children">
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> profiles_searches.json</div>
+                                            <div class="tree-file"><i class="fas fa-file-lines"></i> word_or_phrase_searches.json</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1QXloArKCPgE1wAYZh-phUaqY8Tj8SibC/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Shopee -->
+                    <div class="guide-card extra" data-category="extra" id="guide-shopee">
+                        <div class="guide-card-header">
+                            <div class="guide-logo shopee-bg">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div>
+                                <h3>Shopee</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag extra-tag">Thêm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1Mk3nUTiNEfC6uyvagoi5pC3MQ_ro9-N9/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Lazada -->
+                    <div class="guide-card extra" data-category="extra" id="guide-lazada">
+                        <div class="guide-card-header">
+                            <div class="guide-logo lazada-bg">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div>
+                                <h3>Lazada</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag extra-tag">Thêm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1vVJH-zWy2HHfw6rXR2QeXUxma4tG5mdm/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ChatGPT -->
+                    <div class="guide-card extra" data-category="extra" id="guide-chatgpt">
+                        <div class="guide-card-header">
+                            <div class="guide-logo chatgpt-bg">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3>ChatGPT</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag extra-tag">Thêm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1x0G_JFPkJpha2_2YqGJy0i2xOl_BuyJ-/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn chi tiết (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Utility Cards -->
+                    <div class="guide-card utility" data-category="utility" id="guide-time-iphone">
+                        <div class="guide-card-header">
+                            <div class="guide-logo utility-bg">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                            <div>
+                                <h3>Xem thời gian sử dụng (iPhone)</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag utility-tag">Tiện ích</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1IzCzRDfi_N3gfeXPtzj6T_q9Os7EtvBR/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="guide-card utility" data-category="utility" id="guide-time-android">
+                        <div class="guide-card-header">
+                            <div class="guide-logo utility-bg">
+                                <i class="fab fa-android"></i>
+                            </div>
+                            <div>
+                                <h3>Xem thời gian sử dụng (Android)</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag utility-tag">Tiện ích</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <div class="guide-multi-links">
+                                <a href="https://drive.google.com/file/d/1As2Dci3ZCak3maig0Jtv7WMfYNXA1MNF/view?usp=sharing" target="_blank" class="guide-download-btn small">
+                                    <i class="fas fa-file-pdf"></i> Cách 1 <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                <a href="https://drive.google.com/file/d/1DdvtRz7hmaz-eKO4saED6O-VWNeN9iDq/view?usp=sharing" target="_blank" class="guide-download-btn small">
+                                    <i class="fas fa-file-pdf"></i> Cách 2 <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-card utility" data-category="utility" id="guide-ig-time-ios">
+                        <div class="guide-card-header">
+                            <div class="guide-logo instagram-bg">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div>
+                                <h3>Thời gian sử dụng Instagram (iOS)</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag utility-tag">Tiện ích</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1EWnKMVFVFBckmy-f0U5iVipzWk3WO8U3/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="guide-card utility" data-category="utility" id="guide-ig-time-app">
+                        <div class="guide-card-header">
+                            <div class="guide-logo instagram-bg">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div>
+                                <h3>Thời gian sử dụng Instagram (Trong app)</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag utility-tag">Tiện ích</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <a href="https://drive.google.com/file/d/1Hhu55EvyUKdIleZmD9pMFqFuyaYundpz/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="guide-card utility" data-category="utility" id="guide-yt-search-history">
+                        <div class="guide-card-header">
+                            <div class="guide-logo youtube-bg">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div>
+                                <h3>Kiểm tra lịch sử tìm kiếm YouTube</h3>
+                                <div class="guide-tags">
+                                    <span class="guide-tag utility-tag">Tiện ích</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="guide-card-body">
+                            <p class="guide-note">Kiểm tra xem YouTube đang bật hay tắt lịch sử tìm kiếm</p>
+                            <a href="https://drive.google.com/file/d/1I-bCS_HpVlG3qTn80uIZj58URvxoeSw3/view?usp=sharing" target="_blank" class="guide-download-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                Xem hướng dẫn (PDF)
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Security & Privacy Section -->
+        <section class="section security-section" id="security">
+            <div class="container">
+                <div class="section-header">
+                    <div class="security-badge-top">
+                        <i class="fas fa-shield-halved"></i>
+                        ESOMAR Compliant
+                    </div>
+                    <h2 class="section-title">
+                        Cam kết Bảo mật & Quyền riêng tư
+                    </h2>
+                    <p class="section-desc">Dữ liệu của bạn được bảo vệ theo tiêu chuẩn nghiên cứu thị trường quốc tế</p>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="trust-badge-item">
+                        <div class="trust-badge-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <span>Tuân thủ<br><strong>ESOMAR/ICC</strong></span>
+                    </div>
+                    <div class="trust-badge-item">
+                        <div class="trust-badge-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <span>Mã hóa<br><strong>Dữ liệu</strong></span>
+                    </div>
+                    <div class="trust-badge-item">
+                        <div class="trust-badge-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <span>Ẩn danh<br><strong>Hoàn toàn</strong></span>
+                    </div>
+                    <div class="trust-badge-item">
+                        <div class="trust-badge-icon">
+                            <i class="fas fa-trash-can"></i>
+                        </div>
+                        <span>Xóa sau<br><strong>90 ngày</strong></span>
+                    </div>
+                </div>
+
+                <!-- Security Commitments -->
+                <div class="security-grid">
+                    <div class="security-card">
+                        <div class="security-card-icon research">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3>Chỉ phục vụ nghiên cứu</h3>
+                        <p>Dữ liệu của bạn <strong>chỉ được sử dụng cho mục đích nghiên cứu thị trường</strong>. Chúng tôi phân tích xu hướng sử dụng ứng dụng ở quy mô tổng thể, không quan tâm đến thông tin cá nhân của từng người.</p>
+                        <div class="security-tag"><i class="fas fa-check"></i> Mục đích duy nhất: Nghiên cứu</div>
+                    </div>
+                    <div class="security-card">
+                        <div class="security-card-icon privacy">
+                            <i class="fas fa-eye-slash"></i>
+                        </div>
+                        <h3>Ẩn danh hóa dữ liệu</h3>
+                        <p>Ngay khi nhận được, dữ liệu sẽ được <strong>tách rời khỏi thông tin cá nhân</strong> (tên, SĐT). Kết quả nghiên cứu chỉ thể hiện dưới dạng thống kê, không ai có thể truy ngược về bạn.</p>
+                        <div class="security-tag"><i class="fas fa-check"></i> Không ai biết đây là dữ liệu của bạn</div>
+                    </div>
+                    <div class="security-card">
+                        <div class="security-card-icon noshare">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <h3>Không chia sẻ cho bên thứ ba</h3>
+                        <p>Dữ liệu <strong>tuyệt đối không được bán, cho, hoặc chia sẻ</strong> cho bất kỳ bên thứ ba nào ngoài nhóm nghiên cứu. Đây là cam kết bắt buộc theo chuẩn ESOMAR.</p>
+                        <div class="security-tag"><i class="fas fa-check"></i> Cam kết bằng văn bản</div>
+                    </div>
+                    <div class="security-card">
+                        <div class="security-card-icon delete">
+                            <i class="fas fa-clock-rotate-left"></i>
+                        </div>
+                        <h3>Xóa dữ liệu sau nghiên cứu</h3>
+                        <p>Toàn bộ dữ liệu thô sẽ được <strong>xóa vĩnh viễn trong vòng 90 ngày</strong> sau khi hoàn thành nghiên cứu. Chúng tôi chỉ giữ lại kết quả thống kê tổng hợp (không chứa dữ liệu cá nhân).</p>
+                        <div class="security-tag"><i class="fas fa-check"></i> Xóa tự động sau 90 ngày</div>
+                    </div>
+                </div>
+
+                <!-- Data Flow Visual -->
+                <div class="data-flow">
+                    <h3 class="data-flow-title">
+                        <i class="fas fa-route"></i>
+                        Dữ liệu của bạn đi đâu?
+                    </h3>
+                    <div class="data-flow-steps">
+                        <div class="data-flow-step">
+                            <div class="data-flow-icon you">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="data-flow-label">Bạn gửi file</span>
+                        </div>
+                        <div class="data-flow-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="data-flow-arrow-label">Mã hóa</span>
+                        </div>
+                        <div class="data-flow-step">
+                            <div class="data-flow-icon encrypt">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <span class="data-flow-label">Ẩn danh hóa</span>
+                        </div>
+                        <div class="data-flow-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="data-flow-arrow-label">Phân tích</span>
+                        </div>
+                        <div class="data-flow-step">
+                            <div class="data-flow-icon analyze">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <span class="data-flow-label">Nghiên cứu</span>
+                        </div>
+                        <div class="data-flow-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="data-flow-arrow-label">90 ngày</span>
+                        </div>
+                        <div class="data-flow-step">
+                            <div class="data-flow-icon remove">
+                                <i class="fas fa-trash-can"></i>
+                            </div>
+                            <span class="data-flow-label">Xóa vĩnh viễn</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESOMAR Note -->
+                <div class="esomar-note">
+                    <div class="esomar-note-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="esomar-note-content">
+                        <strong>ESOMAR/ICC là gì?</strong>
+                        <p>ESOMAR (European Society for Opinion and Marketing Research) là tổ chức nghiên cứu thị trường lớn nhất thế giới. Bộ quy tắc ESOMAR/ICC đặt ra các tiêu chuẩn nghiêm ngặt về bảo vệ quyền riêng tư và dữ liệu của người tham gia nghiên cứu, được áp dụng tại <strong>hơn 130 quốc gia</strong>. Dự án này tuân thủ đầy đủ các quy tắc này.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section faq-section" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-circle-question"></i>
+                        Câu hỏi thường gặp
+                    </h2>
+                    <p class="section-desc">Giải đáp mọi thắc mắc trước khi bạn tham gia</p>
+                </div>
+
+                <div class="faq-container">
+                    <div class="faq-item" id="faq-1">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-shield-halved"></i></div>
+                            <span>File dữ liệu của tôi chứa những gì? Có thông tin nhạy cảm không?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>File dữ liệu chỉ chứa <strong>lịch sử hoạt động trên ứng dụng</strong>, ví dụ:</p>
+                                <ul>
+                                    <li><strong>YouTube</strong>: Video bạn đã xem, từ khóa đã tìm kiếm</li>
+                                    <li><strong>TikTok</strong>: Lịch sử xem video, tìm kiếm, mua hàng trên TikTok Shop</li>
+                                    <li><strong>Facebook/Instagram</strong>: Quảng cáo bạn đã xem, nhóm bạn tham gia</li>
+                                </ul>
+                                <div class="faq-highlight">
+                                    <i class="fas fa-check-circle"></i>
+                                    <strong>Không chứa:</strong> Mật khẩu, tin nhắn riêng tư, hình ảnh cá nhân, thông tin tài chính hoặc thẻ ngân hàng.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-2">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-user-secret"></i></div>
+                            <span>Ai sẽ xem file của tôi? Có bị lộ thông tin không?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Chỉ có <strong>nhóm nghiên cứu nội bộ</strong> (2-3 người) được phép truy cập dữ liệu thô. Quy trình xử lý:</p>
+                                <ol>
+                                    <li>File được nhận → <strong>xóa tên, SĐT</strong> → gán mã số ẩn danh</li>
+                                    <li>Dữ liệu ẩn danh được phân tích bằng phần mềm tự động</li>
+                                    <li>Kết quả chỉ là <strong>thống kê tổng hợp</strong> (ví dụ: "70% người dùng xem video giải trí")</li>
+                                </ol>
+                                <div class="faq-highlight">
+                                    <i class="fas fa-check-circle"></i>
+                                    Không ai có thể biết đâu là dữ liệu của bạn trong kết quả nghiên cứu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-3">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-flask"></i></div>
+                            <span>Tại sao cần tải file dữ liệu? Dữ liệu dùng để làm gì?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Đây là dự án <strong>nghiên cứu hành vi sử dụng ứng dụng</strong> của người Việt Nam. Chúng tôi cần hiểu:</p>
+                                <ul>
+                                    <li>Người dùng thường xem loại nội dung gì trên mỗi app?</li>
+                                    <li>Thói quen tìm kiếm và mua sắm online ra sao?</li>
+                                    <li>Quảng cáo nào thu hút sự chú ý nhiều nhất?</li>
+                                </ul>
+                                <p>Kết quả giúp <strong>cải thiện trải nghiệm ứng dụng</strong> và nội dung phục vụ người dùng tốt hơn. Dữ liệu của bạn đóng góp trực tiếp vào quá trình này!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-4">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <span>Tôi nhận tiền thưởng bằng cách nào và khi nào?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Sau khi gửi file đầy đủ và được kiểm tra:</p>
+                                <ul>
+                                    <li><strong>Mức thưởng</strong>: 50.000đ mỗi app, tối đa 10 app = <strong>500.000đ</strong></li>
+                                    <li><strong>Hình thức</strong>: Gửi mã <strong>Evoucher GotIT</strong> qua SMS điện thoại</li>
+                                    <li><strong>Thời gian</strong>: Thanh toán định kỳ <strong>1-2 tuần/lần</strong> sau khi nhận đủ file hợp lệ</li>
+                                </ul>
+                                <div class="faq-highlight">
+                                    <i class="fas fa-check-circle"></i>
+                                    Bạn sẽ được thông báo qua Zalo khi tiền thưởng được chuyển.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-5">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-file-circle-xmark"></i></div>
+                            <span>Nếu file quá lớn hoặc gửi qua Zalo không được thì sao?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Nếu file quá lớn (trên 200MB), bạn có thể:</p>
+                                <ul>
+                                    <li>Tải lên <strong>Google Drive</strong> → bật chia sẻ → gửi link qua Zalo</li>
+                                    <li>Dùng <strong>WeTransfer</strong> (miễn phí, tối đa 2GB)</li>
+                                    <li>Liên hệ trưởng nhóm để được hướng dẫn cụ thể</li>
+                                </ul>
+                                <div class="faq-highlight">
+                                    <i class="fas fa-info-circle"></i>
+                                    Nhớ cấp quyền tải ("Mọi người có link đều có thể xem") khi chia sẻ Google Drive!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-6">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-rotate"></i></div>
+                            <span>Tôi có thể tham gia nhiều lần không?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Mỗi tài khoản ứng dụng chỉ tham gia <strong>1 lần</strong> cho dự án này. Tuy nhiên:</p>
+                                <ul>
+                                    <li>Bạn có thể bổ sung thêm app (nếu lần đầu chưa gửi đủ 10 app)</li>
+                                    <li>Nếu file bị lỗi, bạn có thể gửi lại file đúng</li>
+                                    <li>Công ty thường xuyên có <strong>các dự án mới</strong> — nếu bạn tham gia tốt, sẽ được mời lại!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-7">
+                        <button class="faq-question" aria-expanded="false">
+                            <div class="faq-q-icon"><i class="fas fa-circle-exclamation"></i></div>
+                            <span>Tôi có quyền từ chối hoặc rút lui không?</span>
+                            <div class="faq-toggle"><i class="fas fa-plus"></i></div>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p><strong>Hoàn toàn có!</strong> Theo chuẩn ESOMAR, bạn có các quyền sau:</p>
+                                <ul>
+                                    <li><strong>Quyền từ chối</strong>: Bạn có thể ngừng tham gia bất kỳ lúc nào</li>
+                                    <li><strong>Quyền xóa dữ liệu</strong>: Yêu cầu xóa toàn bộ dữ liệu đã gửi</li>
+                                    <li><strong>Quyền được biết</strong>: Hỏi bất kỳ câu hỏi nào về cách dữ liệu được sử dụng</li>
+                                </ul>
+                                <div class="faq-highlight">
+                                    <i class="fas fa-check-circle"></i>
+                                    Liên hệ trưởng nhóm qua Zalo để thực hiện bất kỳ quyền nào ở trên.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Still have questions -->
+                <div class="faq-cta">
+                    <div class="faq-cta-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="faq-cta-content">
+                        <h4>Vẫn còn thắc mắc?</h4>
+                        <p>Hãy liên hệ trưởng nhóm qua Zalo để được giải đáp nhanh nhất</p>
+                    </div>
+                    <a href="http://zalo.me/84764551902" target="_blank" class="btn btn-primary faq-cta-btn">
+                        <i class="fas fa-comment-dots"></i>
+                        Nhắn Zalo ngay
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <i class="fas fa-file-circle-check"></i>
+                        <span>KS Ứng Dụng 260137</span>
+                    </div>
+                    <p>Công cụ hỗ trợ đáp viên kiểm tra và tải file dữ liệu</p>
+                </div>
+                <div class="footer-right">
+                    <a href="http://zalo.me/84764551902" target="_blank" class="footer-contact">
+                        <i class="fas fa-comment-dots"></i>
+                        Liên hệ qua Zalo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
